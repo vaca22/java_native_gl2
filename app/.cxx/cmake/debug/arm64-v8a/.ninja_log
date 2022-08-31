@@ -1,0 +1,7 @@
+# ninja log v5
+2	235	683617751	CMakeFiles/gl2jni.dir/gl_code.cpp.o	7b02354c93eb87d6
+236	507	683617751	C:/Users/liguanghao/Desktop/ndk-samples-master/ndk-samples-master/hello-gl2/app/build/intermediates/cmake/debug/obj/arm64-v8a/libgl2jni.so	905f742fe586d881
+35	241	683617783	CMakeFiles/gl2jni.dir/gl_code.cpp.o	7b02354c93eb87d6
+241	514	683617783	C:/Users/liguanghao/Desktop/ndk-samples-master/ndk-samples-master/hello-gl2/app/build/intermediates/cmake/debug/obj/arm64-v8a/libgl2jni.so	905f742fe586d881
+23	227	683617788	CMakeFiles/gl2jni.dir/gl_code.cpp.o	7b02354c93eb87d6
+227	497	683617789	C:/Users/liguanghao/Desktop/ndk-samples-master/ndk-samples-master/hello-gl2/app/build/intermediates/cmake/debug/obj/arm64-v8a/libgl2jni.so	905f742fe586d881
