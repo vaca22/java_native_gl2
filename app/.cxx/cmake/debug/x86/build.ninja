@@ -43,10 +43,43 @@ include CMakeFiles/rules.ninja
 
 build cmake_object_order_depends_target_gl2jni: phony || CMakeFiles/gl2jni.dir
 
+build CMakeFiles/gl2jni.dir/Common/esUtil.c.o: C_COMPILER__gl2jni_Debug C$:/Users/liguanghao/Desktop/ndk-samples-master/ndk-samples-master/hello-gl2/app/src/main/cpp/Common/esUtil.c || cmake_object_order_depends_target_gl2jni
+  DEFINES = -Dgl2jni_EXPORTS
+  DEP_FILE = CMakeFiles\gl2jni.dir\Common\esUtil.c.o.d
+  FLAGS = -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -mstackrealign -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security  -O0 -fno-limit-debug-info  -fPIC
+  INCLUDES = -IC:/Users/liguanghao/Desktop/ndk-samples-master/ndk-samples-master/hello-gl2/app/src/main/cpp/Common
+  OBJECT_DIR = CMakeFiles\gl2jni.dir
+  OBJECT_FILE_DIR = CMakeFiles\gl2jni.dir\Common
+
+build CMakeFiles/gl2jni.dir/Common/esShader.c.o: C_COMPILER__gl2jni_Debug C$:/Users/liguanghao/Desktop/ndk-samples-master/ndk-samples-master/hello-gl2/app/src/main/cpp/Common/esShader.c || cmake_object_order_depends_target_gl2jni
+  DEFINES = -Dgl2jni_EXPORTS
+  DEP_FILE = CMakeFiles\gl2jni.dir\Common\esShader.c.o.d
+  FLAGS = -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -mstackrealign -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security  -O0 -fno-limit-debug-info  -fPIC
+  INCLUDES = -IC:/Users/liguanghao/Desktop/ndk-samples-master/ndk-samples-master/hello-gl2/app/src/main/cpp/Common
+  OBJECT_DIR = CMakeFiles\gl2jni.dir
+  OBJECT_FILE_DIR = CMakeFiles\gl2jni.dir\Common
+
+build CMakeFiles/gl2jni.dir/Common/esTransform.c.o: C_COMPILER__gl2jni_Debug C$:/Users/liguanghao/Desktop/ndk-samples-master/ndk-samples-master/hello-gl2/app/src/main/cpp/Common/esTransform.c || cmake_object_order_depends_target_gl2jni
+  DEFINES = -Dgl2jni_EXPORTS
+  DEP_FILE = CMakeFiles\gl2jni.dir\Common\esTransform.c.o.d
+  FLAGS = -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -mstackrealign -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security  -O0 -fno-limit-debug-info  -fPIC
+  INCLUDES = -IC:/Users/liguanghao/Desktop/ndk-samples-master/ndk-samples-master/hello-gl2/app/src/main/cpp/Common
+  OBJECT_DIR = CMakeFiles\gl2jni.dir
+  OBJECT_FILE_DIR = CMakeFiles\gl2jni.dir\Common
+
+build CMakeFiles/gl2jni.dir/Common/esShapes.c.o: C_COMPILER__gl2jni_Debug C$:/Users/liguanghao/Desktop/ndk-samples-master/ndk-samples-master/hello-gl2/app/src/main/cpp/Common/esShapes.c || cmake_object_order_depends_target_gl2jni
+  DEFINES = -Dgl2jni_EXPORTS
+  DEP_FILE = CMakeFiles\gl2jni.dir\Common\esShapes.c.o.d
+  FLAGS = -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -mstackrealign -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security  -O0 -fno-limit-debug-info  -fPIC
+  INCLUDES = -IC:/Users/liguanghao/Desktop/ndk-samples-master/ndk-samples-master/hello-gl2/app/src/main/cpp/Common
+  OBJECT_DIR = CMakeFiles\gl2jni.dir
+  OBJECT_FILE_DIR = CMakeFiles\gl2jni.dir\Common
+
 build CMakeFiles/gl2jni.dir/gl_code.cpp.o: CXX_COMPILER__gl2jni_Debug C$:/Users/liguanghao/Desktop/ndk-samples-master/ndk-samples-master/hello-gl2/app/src/main/cpp/gl_code.cpp || cmake_object_order_depends_target_gl2jni
   DEFINES = -Dgl2jni_EXPORTS
   DEP_FILE = CMakeFiles\gl2jni.dir\gl_code.cpp.o.d
   FLAGS = -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -mstackrealign -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security   -std=c++11 -Wall -O0 -fno-limit-debug-info  -fPIC
+  INCLUDES = -IC:/Users/liguanghao/Desktop/ndk-samples-master/ndk-samples-master/hello-gl2/app/src/main/cpp/Common
   OBJECT_DIR = CMakeFiles\gl2jni.dir
   OBJECT_FILE_DIR = CMakeFiles\gl2jni.dir
 
@@ -58,7 +91,7 @@ build CMakeFiles/gl2jni.dir/gl_code.cpp.o: CXX_COMPILER__gl2jni_Debug C$:/Users/
 #############################################
 # Link the shared library C:\Users\liguanghao\Desktop\ndk-samples-master\ndk-samples-master\hello-gl2\app\build\intermediates\cmake\debug\obj\x86\libgl2jni.so
 
-build C$:/Users/liguanghao/Desktop/ndk-samples-master/ndk-samples-master/hello-gl2/app/build/intermediates/cmake/debug/obj/x86/libgl2jni.so: CXX_SHARED_LIBRARY_LINKER__gl2jni_Debug CMakeFiles/gl2jni.dir/gl_code.cpp.o
+build C$:/Users/liguanghao/Desktop/ndk-samples-master/ndk-samples-master/hello-gl2/app/build/intermediates/cmake/debug/obj/x86/libgl2jni.so: CXX_SHARED_LIBRARY_LINKER__gl2jni_Debug CMakeFiles/gl2jni.dir/Common/esUtil.c.o CMakeFiles/gl2jni.dir/Common/esShader.c.o CMakeFiles/gl2jni.dir/Common/esTransform.c.o CMakeFiles/gl2jni.dir/Common/esShapes.c.o CMakeFiles/gl2jni.dir/gl_code.cpp.o
   LANGUAGE_COMPILE_FLAGS = -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -mstackrealign -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security   -std=c++11 -Wall -O0 -fno-limit-debug-info
   LINK_FLAGS = -Wl,--exclude-libs,libgcc.a -Wl,--exclude-libs,libgcc_real.a -Wl,--exclude-libs,libatomic.a -static-libstdc++ -Wl,--build-id=sha1 -Wl,--no-rosegment -Wl,--fatal-warnings -Wl,--no-undefined -Qunused-arguments
   LINK_LIBRARIES = -landroid  -llog  -lEGL  -lGLESv2  -latomic -lm
