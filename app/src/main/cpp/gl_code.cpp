@@ -30,6 +30,40 @@
 #define  LOGI(...)  __android_log_print(ANDROID_LOG_INFO,LOG_TAG,__VA_ARGS__)
 #define  LOGE(...)  __android_log_print(ANDROID_LOG_ERROR,LOG_TAG,__VA_ARGS__)
 
+
+
+
+
+#include "esUtil.h"
+
+typedef struct
+{
+    // Handle to a program object
+    GLuint programObject;
+
+    // Attribute locations
+    GLint  positionLoc;
+
+    // Uniform locations
+    GLint  mvpLoc;
+
+    // Vertex daata
+    GLfloat  *vertices;
+    GLuint *indices;
+    int       numIndices;
+
+    // Rotation angle
+    GLfloat   angle;
+
+    // MVP matrix
+    ESMatrix  mvpMatrix;
+} UserData;
+
+
+UserData  *userData;
+
+
+
 static void printGLString(const char *name, GLenum s) {
     const char *v = (const char *) glGetString(s);
     LOGI("GL %s = %s\n", name, v);
@@ -43,16 +77,29 @@ static void checkGlError(const char *op) {
 }
 
 auto gVertexShader =
-        "attribute vec4 vPosition;\n"
-        "void main() {\n"
-        "  gl_Position = vPosition;\n"
-        "}\n";
+        "uniform mat4 u_mvpMatrix;                   \n"
+        "attribute vec4 a_position;                  \n"
+        "void main()                                 \n"
+        "{                                           \n"
+        "   gl_Position = u_mvpMatrix * a_position;  \n"
+        "}                                           \n";
+
+
+//        "attribute vec4 vPosition;\n"
+//        "void main() {\n"
+//        "  gl_Position = vPosition;\n"
+//        "}\n";
 
 auto gFragmentShader =
-        "precision mediump float;\n"
-        "void main() {\n"
-        "  gl_FragColor = vec4(0.0, 1.0, 0.0, 1.0);\n"
-        "}\n";
+        "precision mediump float;                            \n"
+        "void main()                                         \n"
+        "{                                                   \n"
+        "  gl_FragColor = vec4( 1.0, 0.0, 0.0, 1.0 );        \n"
+        "}                                                   \n";
+//        "precision mediump float;\n"
+//        "void main() {\n"
+//        "  gl_FragColor = vec4(0.0, 1.0, 0.0, 1.0);\n"
+//        "}\n";
 
 GLuint loadShader(GLenum shaderType, const char *pSource) {
     GLuint shader = glCreateShader(shaderType);
@@ -118,8 +165,7 @@ GLuint createProgram(const char *pVertexSource, const char *pFragmentSource) {
     return program;
 }
 
-GLuint gProgram;
-GLuint gvPositionHandle;
+
 
 bool setupGraphics(int w, int h) {
     printGLString("Version", GL_VERSION);
@@ -128,57 +174,107 @@ bool setupGraphics(int w, int h) {
     printGLString("Extensions", GL_EXTENSIONS);
 
     LOGI("setupGraphics(%d, %d)", w, h);
-    gProgram = createProgram(gVertexShader, gFragmentShader);
-    if (!gProgram) {
+    userData->programObject=createProgram(gVertexShader, gFragmentShader);
+    if (!userData->programObject) {
         LOGE("Could not create program.");
         return false;
     }
-    gvPositionHandle = glGetAttribLocation(gProgram, "vPosition");
+    userData->positionLoc = glGetAttribLocation(userData->programObject, "a_position");
     checkGlError("glGetAttribLocation");
     LOGI("glGetAttribLocation(\"vPosition\") = %d\n",
-         gvPositionHandle);
-
+         userData->positionLoc);
+    userData->mvpLoc = glGetUniformLocation( userData->programObject, "u_mvpMatrix" );
+    userData->numIndices = esGenCube( 1.0, &userData->vertices,
+                                      NULL, NULL, &userData->indices );
+    userData->angle = 45.0f;
     glViewport(0, 0, w, h);
     checkGlError("glViewport");
     return true;
 }
 
-const GLfloat gTriangleVertices[] = {0.0f, 0.5f, -0.5f, -0.5f,
-                                     0.5f, -0.5f};
+
+void Update (  float deltaTime,int width,int height )
+{
+
+    ESMatrix perspective;
+    ESMatrix modelview;
+    float    aspect;
+
+    // Compute a rotation angle based on time to rotate the cube
+    userData->angle += ( deltaTime * 40.0f );
+    if( userData->angle >= 360.0f )
+        userData->angle -= 360.0f;
+
+    // Compute the window aspect ratio
+    aspect = (float)width / (float)height;
+
+    // Generate a perspective matrix with a 60 degree FOV
+    esMatrixLoadIdentity( &perspective );
+    esPerspective( &perspective, 60.0f, aspect, 1.0f, 20.0f );
+
+    // Generate a model view matrix to rotate/translate the cube
+    esMatrixLoadIdentity( &modelview );
+
+    // Translate away from the viewer
+    esTranslate( &modelview, 0.0, 0.0, -2.0 );
+
+    // Rotate the cube
+    esRotate( &modelview, userData->angle, 1.0, 0.0, 1.0 );
+
+    // Compute the final MVP by multiplying the
+    // modevleiw and perspective matrices together
+    esMatrixMultiply( &userData->mvpMatrix, &modelview, &perspective );
+}
+
+
 
 void renderFrame() {
     static float grey;
-//    grey += 0.01f;
-//    if (grey > 1.0f) {
-//        grey = 0.0f;
-//    }
+
     glClearColor(grey, grey, grey, 1.0f);
     checkGlError("glClearColor");
+
+
     glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
     checkGlError("glClear");
 
-    glUseProgram(gProgram);
+    glUseProgram(userData->programObject);
     checkGlError("glUseProgram");
 
-    glVertexAttribPointer(gvPositionHandle, 2, GL_FLOAT, GL_FALSE, 0, gTriangleVertices);
+    glVertexAttribPointer(userData->positionLoc, 3, GL_FLOAT, GL_FALSE, 3*sizeof(GLfloat), userData->vertices);
     checkGlError("glVertexAttribPointer");
-    glEnableVertexAttribArray(gvPositionHandle);
+    glEnableVertexAttribArray(userData->positionLoc);
     checkGlError("glEnableVertexAttribArray");
-    glDrawArrays(GL_TRIANGLES, 0, 3);
-    checkGlError("glDrawArrays");
+
+    glUniformMatrix4fv( userData->mvpLoc, 1, GL_FALSE, (GLfloat*) &userData->mvpMatrix.m[0][0] );
+
+    glDrawElements ( GL_TRIANGLES, userData->numIndices, GL_UNSIGNED_INT, userData->indices );
+    checkGlError("glDrawElements");
 }
 
 extern "C" {
+
 JNIEXPORT void JNICALL
 Java_com_android_gl2jni_GL2JNILib_init(JNIEnv *env, jobject obj, jint width, jint height);
+
 JNIEXPORT void JNICALL Java_com_android_gl2jni_GL2JNILib_step(JNIEnv *env, jobject obj);
 };
 
+int ww=10;
+int hh=20;
+
 JNIEXPORT void JNICALL
 Java_com_android_gl2jni_GL2JNILib_init(JNIEnv *env, jobject obj, jint width, jint height) {
+    userData = static_cast<UserData *>(malloc(sizeof(UserData)));
     setupGraphics(width, height);
+    ww=width;
+    hh=height;
 }
+
+float cc=0;
 
 JNIEXPORT void JNICALL Java_com_android_gl2jni_GL2JNILib_step(JNIEnv *env, jobject obj) {
     renderFrame();
+    Update(0.001,ww,hh);
+
 }

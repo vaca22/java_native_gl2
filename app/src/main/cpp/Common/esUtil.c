@@ -57,6 +57,9 @@ void ESUTIL_API esInitContext ( ESContext *esContext )
    }
 }
 
+#include <android/log.h>
+#define  LOG_TAG    "gaga"
+#define  LOGE(...)  __android_log_print(ANDROID_LOG_ERROR,LOG_TAG,__VA_ARGS__)
 
 
 
@@ -73,7 +76,7 @@ void ESUTIL_API esLogMessage ( const char *formatStr, ... )
     va_start ( params, formatStr );
     vsprintf ( buf, formatStr, params );
     
-    printf ( "%s", buf );
+   LOGE( "%s", buf );
     
     va_end ( params );
 }
