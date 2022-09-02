@@ -31,85 +31,77 @@
 #define  LOGE(...)  __android_log_print(ANDROID_LOG_ERROR,LOG_TAG,__VA_ARGS__)
 
 
-
-
-
 #include "esUtil.h"
 
-typedef struct
-{
+typedef struct {
     // Handle to a program object
     GLuint programObject;
 
     // Attribute locations
-    GLint  positionLoc;
+    GLint positionLoc;
 
     // Uniform locations
-    GLint  mvpLoc;
+    GLint mvpLoc;
 
     // Vertex daata
-    GLfloat  *vertices;
+    GLfloat *vertices;
     GLuint *indices;
-    int       numIndices;
+    int numIndices;
 
     // Rotation angle
-    GLfloat   angle;
+    GLfloat angle;
 
     // MVP matrix
-    ESMatrix  mvpMatrix;
+    ESMatrix mvpMatrix;
 } UserData;
 
 
-UserData  *userData;
+UserData *userData;
 
-
-float color[] = { 0.0f, 0.5273f, 0.2656f, 1.0f,
-                  0.0f, 0.5273f, 0.2656f, 1.0f,
-                  0.0f, 0.5273f, 0.2656f, 1.0f,
-                  0.0f, 0.5273f, 0.2656f, 1.0f,
-                  0.0f, 0.5273f, 0.2656f, 1.0f,
-                  0.0f, 0.5273f, 0.2656f, 1.0f,
+int COLORS_PER_VERTEX = 4;
+int colorStride = COLORS_PER_VERTEX * 4;
+float color[] = {0.0f, 0.5273f, 0.2656f, 1.0f,
+                 0.0f, 0.5273f, 0.2656f, 1.0f,
+                 0.0f, 0.5273f, 0.2656f, 1.0f,
+                 0.0f, 0.5273f, 0.2656f, 1.0f,
+//                 0.0f, 0.5273f, 0.2656f, 1.0f,
+//                 0.0f, 0.5273f, 0.2656f, 1.0f,
 
         // right, blue
-                  0.0f, 0.3398f, 0.9023f, 1.0f,
-                  0.0f, 0.3398f, 0.9023f, 1.0f,
-                  0.0f, 0.3398f, 0.9023f, 1.0f,
-                  0.0f, 0.3398f, 0.9023f, 1.0f,
-                  0.0f, 0.3398f, 0.9023f, 1.0f,
-                  0.0f, 0.3398f, 0.9023f, 1.0f,
+                 0.0f, 0.9398f, 0.9023f, 1.0f,
+                 0.0f, 0.9398f, 0.9023f, 1.0f,
+                 0.0f, 0.9398f, 0.9023f, 1.0f,
+                 0.0f, 0.9398f, 0.9023f, 1.0f,
+//                 0.0f, 0.3398f, 0.9023f, 1.0f,
+//                 0.0f, 0.3398f, 0.9023f, 1.0f,
 
         // back, also green
-                  0.0f, 0.5273f, 0.2656f, 1.0f,
-                  0.0f, 0.5273f, 0.2656f, 1.0f,
-                  0.0f, 0.5273f, 0.2656f, 1.0f,
-                  0.0f, 0.5273f, 0.2656f, 1.0f,
-                  0.0f, 0.5273f, 0.2656f, 1.0f,
-                  0.0f, 0.5273f, 0.2656f, 1.0f,
+                 0.0f, 0.5273f, 0.2656f, 1.0f,
+                 0.0f, 0.5273f, 0.2656f, 1.0f,
+                 0.0f, 0.5273f, 0.2656f, 1.0f,
+                 0.0f, 0.5273f, 0.2656f, 1.0f,
+//                 0.0f, 0.5273f, 0.2656f, 1.0f,
+//                 0.0f, 0.5273f, 0.2656f, 1.0f,
 
         // left, also blue
-                  0.0f, 0.3398f, 0.9023f, 1.0f,
-                  0.0f, 0.3398f, 0.9023f, 1.0f,
-                  0.0f, 0.3398f, 0.9023f, 1.0f,
-                  0.0f, 0.3398f, 0.9023f, 1.0f,
-                  0.0f, 0.3398f, 0.9023f, 1.0f,
-                  0.0f, 0.3398f, 0.9023f, 1.0f,
+                 0.0f, 0.3398f, 0.9023f, 1.0f,
+                 0.0f, 0.3398f, 0.9023f, 1.0f,
+                 0.0f, 0.3398f, 0.9023f, 1.0f,
+                 0.0f, 0.3398f, 0.9023f, 1.0f,
+
 
         // top, red
-                  0.8359375f,  0.17578125f,  0.125f, 1.0f,
-                  0.8359375f,  0.17578125f,  0.125f, 1.0f,
-                  0.8359375f,  0.17578125f,  0.125f, 1.0f,
-                  0.8359375f,  0.17578125f,  0.125f, 1.0f,
-                  0.8359375f,  0.17578125f,  0.125f, 1.0f,
-                  0.8359375f,  0.17578125f,  0.125f, 1.0f,
+                 0.8359375f, 0.87578125f, 0.125f, 1.0f,
+                 0.8359375f, 0.87578125f, 0.125f, 1.0f,
+                 0.8359375f, 0.87578125f, 0.125f, 1.0f,
+                 0.8359375f, 0.87578125f, 0.125f, 1.0f,
+
 
         // bottom, also red
-                  0.8359375f,  0.17578125f,  0.125f, 1.0f,
-                  0.8359375f,  0.17578125f,  0.125f, 1.0f,
-                  0.8359375f,  0.17578125f,  0.125f, 1.0f,
-                  0.8359375f,  0.17578125f,  0.125f, 1.0f,
-                  0.8359375f,  0.17578125f,  0.125f, 1.0f,
-                  0.8359375f,  0.17578125f,  0.125f, 1.0f, };
-
+                 0.8359375f, 0.17578125f, 0.825f, 1.0f,
+                 0.8359375f, 0.17578125f, 0.825f, 1.0f,
+                 0.8359375f, 0.17578125f, 0.825f, 1.0f,
+                 0.8359375f, 0.17578125f, 0.825f, 1.0f,};
 
 
 static void printGLString(const char *name, GLenum s) {
@@ -127,9 +119,12 @@ static void checkGlError(const char *op) {
 auto gVertexShader =
         "uniform mat4 u_mvpMatrix;                   \n"
         "attribute vec4 a_position;                  \n"
+        "attribute vec4 vColor;                      \n"
+        "varying vec4 vColorVarying;                 \n"
         "void main()                                 \n"
         "{                                           \n"
         "   gl_Position = u_mvpMatrix * a_position;  \n"
+        "   vColorVarying = vColor;                  \n"
         "}                                           \n";
 
 
@@ -140,10 +135,10 @@ auto gVertexShader =
 
 auto gFragmentShader =
         "precision mediump float;                            \n"
-        "uniform vec4 vColor;                                \n"
+        "varying vec4 vColorVarying;                              \n"
         "void main()                                         \n"
         "{                                                   \n"
-        "  gl_FragColor = vColor;                            \n"
+        "  gl_FragColor = vColorVarying;                            \n"
         "}                                                   \n";
 //        "precision mediump float;\n"
 //        "void main() {\n"
@@ -215,7 +210,6 @@ GLuint createProgram(const char *pVertexSource, const char *pFragmentSource) {
 }
 
 
-
 bool setupGraphics(int w, int h) {
     printGLString("Version", GL_VERSION);
     printGLString("Vendor", GL_VENDOR);
@@ -223,7 +217,7 @@ bool setupGraphics(int w, int h) {
     printGLString("Extensions", GL_EXTENSIONS);
 
     LOGI("setupGraphics(%d, %d)", w, h);
-    userData->programObject=createProgram(gVertexShader, gFragmentShader);
+    userData->programObject = createProgram(gVertexShader, gFragmentShader);
     if (!userData->programObject) {
         LOGE("Could not create program.");
         return false;
@@ -232,49 +226,54 @@ bool setupGraphics(int w, int h) {
     checkGlError("glGetAttribLocation");
     LOGI("glGetAttribLocation(\"vPosition\") = %d\n",
          userData->positionLoc);
-    userData->mvpLoc = glGetUniformLocation( userData->programObject, "u_mvpMatrix" );
-    userData->numIndices = esGenCube( 1.0, &userData->vertices,
-                                      NULL, NULL, &userData->indices );
+    userData->mvpLoc = glGetUniformLocation(userData->programObject, "u_mvpMatrix");
+    userData->numIndices = esGenCube(1.0, &userData->vertices,
+                                     NULL, NULL, &userData->indices);
     userData->angle = 45.0f;
     glViewport(0, 0, w, h);
     checkGlError("glViewport");
+
+//    glClearDepthf(1.0f);
+//    glEnable(GL_DEPTH_TEST);
+//    glDepthFunc(GL_GREATER);
+    glCullFace ( GL_BACK );
+    glEnable ( GL_CULL_FACE );
+
     return true;
 }
 
 
-void Update (  float deltaTime,int width,int height )
-{
+void Update(float deltaTime, int width, int height) {
 
     ESMatrix perspective;
     ESMatrix modelview;
-    float    aspect;
+    float aspect;
 
     // Compute a rotation angle based on time to rotate the cube
-    userData->angle += ( deltaTime * 40.0f );
-    if( userData->angle >= 360.0f )
+    userData->angle += (deltaTime * 40.0f);
+    if (userData->angle >= 360.0f)
         userData->angle -= 360.0f;
 
     // Compute the window aspect ratio
-    aspect = (float)width / (float)height;
+    aspect = (float) width / (float) height;
 
     // Generate a perspective matrix with a 60 degree FOV
-    esMatrixLoadIdentity( &perspective );
-    esPerspective( &perspective, 100.0f, aspect, 1.0f, 30.0f );
+    esMatrixLoadIdentity(&perspective);
+    esPerspective(&perspective, 100.0f, aspect, 1.0f, 30.0f);
 
     // Generate a model view matrix to rotate/translate the cube
-    esMatrixLoadIdentity( &modelview );
+    esMatrixLoadIdentity(&modelview);
 
     // Translate away from the viewer
-    esTranslate( &modelview, 0.0, 0.0, -5.0 );
+    esTranslate(&modelview, 0.0, 0.0, -5.0);
 
     // Rotate the cube
-    esRotate( &modelview, userData->angle, 1.0, 0.0, 1.0 );
+    esRotate(&modelview, userData->angle, 1.0, 0.0, 1.0);
 
     // Compute the final MVP by multiplying the
     // modevleiw and perspective matrices together
-    esMatrixMultiply( &userData->mvpMatrix, &modelview, &perspective );
+    esMatrixMultiply(&userData->mvpMatrix, &modelview, &perspective);
 }
-
 
 
 void renderFrame() {
@@ -290,19 +289,28 @@ void renderFrame() {
     glUseProgram(userData->programObject);
     checkGlError("glUseProgram");
 
-    glVertexAttribPointer(userData->positionLoc, 3, GL_FLOAT, GL_FALSE, 3*sizeof(GLfloat), userData->vertices);
+    glVertexAttribPointer(userData->positionLoc, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat),
+                          userData->vertices);
     checkGlError("glVertexAttribPointer");
     glEnableVertexAttribArray(userData->positionLoc);
     checkGlError("glEnableVertexAttribArray");
 
-    glUniformMatrix4fv( userData->mvpLoc, 1, GL_FALSE, (GLfloat*) &userData->mvpMatrix.m[0][0] );
+    glUniformMatrix4fv(userData->mvpLoc, 1, GL_FALSE, (GLfloat *) &userData->mvpMatrix.m[0][0]);
 
-    GLint mColorHandle =glGetUniformLocation(userData->programObject, "vColor");
+//    GLint mColorHandle =glGetUniformLocation(userData->programObject, "vColor");
+//
+//    // Set color for drawing the triangle
+//    glUniform4fv(mColorHandle, 1, color);
+    GLint mColorHandle = glGetAttribLocation(userData->programObject, "vColor");
+    glEnableVertexAttribArray(mColorHandle);
+    glVertexAttribPointer(
+            mColorHandle, COLORS_PER_VERTEX,
+            GL_FLOAT, false,
+            0, color);
 
-    // Set color for drawing the triangle
-    glUniform4fv(mColorHandle, 1, color);
 
-    glDrawElements ( GL_TRIANGLES, userData->numIndices, GL_UNSIGNED_INT, userData->indices );
+    glClear(GL_DEPTH_BUFFER_BIT);
+    glDrawElements(GL_TRIANGLES, userData->numIndices, GL_UNSIGNED_INT, userData->indices);
     checkGlError("glDrawElements");
 }
 
@@ -314,21 +322,21 @@ Java_com_android_gl2jni_GL2JNILib_init(JNIEnv *env, jobject obj, jint width, jin
 JNIEXPORT void JNICALL Java_com_android_gl2jni_GL2JNILib_step(JNIEnv *env, jobject obj);
 };
 
-int ww=10;
-int hh=20;
+int ww = 10;
+int hh = 20;
 
 JNIEXPORT void JNICALL
 Java_com_android_gl2jni_GL2JNILib_init(JNIEnv *env, jobject obj, jint width, jint height) {
     userData = static_cast<UserData *>(malloc(sizeof(UserData)));
     setupGraphics(width, height);
-    ww=width;
-    hh=height;
+    ww = width;
+    hh = height;
 }
 
-float cc=0;
+float cc = 0;
 
 JNIEXPORT void JNICALL Java_com_android_gl2jni_GL2JNILib_step(JNIEnv *env, jobject obj) {
     renderFrame();
-    Update(0.001,ww,hh);
+    Update(0.01, ww, hh);
 
 }
