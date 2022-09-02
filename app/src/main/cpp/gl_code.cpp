@@ -216,7 +216,7 @@ void Update (  float deltaTime,int width,int height )
     esMatrixLoadIdentity( &modelview );
 
     // Translate away from the viewer
-    esTranslate( &modelview, 0.0, 0.0, -2.0 );
+    esTranslate( &modelview, 0.0, 0.0, -5.0 );
 
     // Rotate the cube
     esRotate( &modelview, userData->angle, 1.0, 0.0, 1.0 );
