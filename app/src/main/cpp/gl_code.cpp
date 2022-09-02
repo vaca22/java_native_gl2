@@ -63,6 +63,54 @@ typedef struct
 UserData  *userData;
 
 
+float color[] = { 0.0f, 0.5273f, 0.2656f, 1.0f,
+                  0.0f, 0.5273f, 0.2656f, 1.0f,
+                  0.0f, 0.5273f, 0.2656f, 1.0f,
+                  0.0f, 0.5273f, 0.2656f, 1.0f,
+                  0.0f, 0.5273f, 0.2656f, 1.0f,
+                  0.0f, 0.5273f, 0.2656f, 1.0f,
+
+        // right, blue
+                  0.0f, 0.3398f, 0.9023f, 1.0f,
+                  0.0f, 0.3398f, 0.9023f, 1.0f,
+                  0.0f, 0.3398f, 0.9023f, 1.0f,
+                  0.0f, 0.3398f, 0.9023f, 1.0f,
+                  0.0f, 0.3398f, 0.9023f, 1.0f,
+                  0.0f, 0.3398f, 0.9023f, 1.0f,
+
+        // back, also green
+                  0.0f, 0.5273f, 0.2656f, 1.0f,
+                  0.0f, 0.5273f, 0.2656f, 1.0f,
+                  0.0f, 0.5273f, 0.2656f, 1.0f,
+                  0.0f, 0.5273f, 0.2656f, 1.0f,
+                  0.0f, 0.5273f, 0.2656f, 1.0f,
+                  0.0f, 0.5273f, 0.2656f, 1.0f,
+
+        // left, also blue
+                  0.0f, 0.3398f, 0.9023f, 1.0f,
+                  0.0f, 0.3398f, 0.9023f, 1.0f,
+                  0.0f, 0.3398f, 0.9023f, 1.0f,
+                  0.0f, 0.3398f, 0.9023f, 1.0f,
+                  0.0f, 0.3398f, 0.9023f, 1.0f,
+                  0.0f, 0.3398f, 0.9023f, 1.0f,
+
+        // top, red
+                  0.8359375f,  0.17578125f,  0.125f, 1.0f,
+                  0.8359375f,  0.17578125f,  0.125f, 1.0f,
+                  0.8359375f,  0.17578125f,  0.125f, 1.0f,
+                  0.8359375f,  0.17578125f,  0.125f, 1.0f,
+                  0.8359375f,  0.17578125f,  0.125f, 1.0f,
+                  0.8359375f,  0.17578125f,  0.125f, 1.0f,
+
+        // bottom, also red
+                  0.8359375f,  0.17578125f,  0.125f, 1.0f,
+                  0.8359375f,  0.17578125f,  0.125f, 1.0f,
+                  0.8359375f,  0.17578125f,  0.125f, 1.0f,
+                  0.8359375f,  0.17578125f,  0.125f, 1.0f,
+                  0.8359375f,  0.17578125f,  0.125f, 1.0f,
+                  0.8359375f,  0.17578125f,  0.125f, 1.0f, };
+
+
 
 static void printGLString(const char *name, GLenum s) {
     const char *v = (const char *) glGetString(s);
@@ -92,9 +140,10 @@ auto gVertexShader =
 
 auto gFragmentShader =
         "precision mediump float;                            \n"
+        "uniform vec4 vColor;                                \n"
         "void main()                                         \n"
         "{                                                   \n"
-        "  gl_FragColor = vec4( 1.0, 0.0, 0.0, 1.0 );        \n"
+        "  gl_FragColor = vColor;                            \n"
         "}                                                   \n";
 //        "precision mediump float;\n"
 //        "void main() {\n"
@@ -247,6 +296,11 @@ void renderFrame() {
     checkGlError("glEnableVertexAttribArray");
 
     glUniformMatrix4fv( userData->mvpLoc, 1, GL_FALSE, (GLfloat*) &userData->mvpMatrix.m[0][0] );
+
+    GLint mColorHandle =glGetUniformLocation(userData->programObject, "vColor");
+
+    // Set color for drawing the triangle
+    glUniform4fv(mColorHandle, 1, color);
 
     glDrawElements ( GL_TRIANGLES, userData->numIndices, GL_UNSIGNED_INT, userData->indices );
     checkGlError("glDrawElements");
