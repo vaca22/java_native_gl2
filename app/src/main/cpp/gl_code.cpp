@@ -233,11 +233,12 @@ bool setupGraphics(int w, int h) {
     glViewport(0, 0, w, h);
     checkGlError("glViewport");
 
-//    glClearDepthf(1.0f);
-//    glEnable(GL_DEPTH_TEST);
-//    glDepthFunc(GL_GREATER);
-    glCullFace ( GL_BACK );
-    glEnable ( GL_CULL_FACE );
+    glClearDepthf(1.0f);
+    glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_LEQUAL);
+    glDepthMask(GL_TRUE);
+//    glCullFace ( GL_BACK );
+//    glEnable ( GL_CULL_FACE );
 
     return true;
 }
@@ -310,6 +311,7 @@ void renderFrame() {
 
 
     glClear(GL_DEPTH_BUFFER_BIT);
+    glClearDepthf(1.0f);
     glDrawElements(GL_TRIANGLES, userData->numIndices, GL_UNSIGNED_INT, userData->indices);
     checkGlError("glDrawElements");
 }
