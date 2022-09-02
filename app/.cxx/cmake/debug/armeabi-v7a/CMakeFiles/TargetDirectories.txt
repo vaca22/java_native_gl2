@@ -1,3 +1,0 @@
-C:/Users/liguanghao/Desktop/ndk-samples-master/ndk-samples-master/hello-gl2/app/.cxx/cmake/debug/armeabi-v7a/CMakeFiles/gl2jni.dir
-C:/Users/liguanghao/Desktop/ndk-samples-master/ndk-samples-master/hello-gl2/app/.cxx/cmake/debug/armeabi-v7a/CMakeFiles/edit_cache.dir
-C:/Users/liguanghao/Desktop/ndk-samples-master/ndk-samples-master/hello-gl2/app/.cxx/cmake/debug/armeabi-v7a/CMakeFiles/rebuild_cache.dir

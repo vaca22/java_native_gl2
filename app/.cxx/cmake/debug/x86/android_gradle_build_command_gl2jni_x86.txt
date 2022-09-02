@@ -1,7 +1,0 @@
-Executable : C:\Users\liguanghao\AppData\Local\Android\Sdk\cmake\3.18.1\bin\ninja.exe
-arguments : 
--C
-C:\Users\liguanghao\Desktop\ndk-samples-master\ndk-samples-master\hello-gl2\app\.cxx\cmake\debug\x86
-gl2jni
-jvmArgs : 
-
