@@ -210,7 +210,7 @@ void Update (  float deltaTime,int width,int height )
 
     // Generate a perspective matrix with a 60 degree FOV
     esMatrixLoadIdentity( &perspective );
-    esPerspective( &perspective, 60.0f, aspect, 1.0f, 20.0f );
+    esPerspective( &perspective, 100.0f, aspect, 1.0f, 30.0f );
 
     // Generate a model view matrix to rotate/translate the cube
     esMatrixLoadIdentity( &modelview );
