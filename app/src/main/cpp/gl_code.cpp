@@ -128,10 +128,7 @@ auto gVertexShader =
         "}                                           \n";
 
 
-//        "attribute vec4 vPosition;\n"
-//        "void main() {\n"
-//        "  gl_Position = vPosition;\n"
-//        "}\n";
+
 
 auto gFragmentShader =
         "precision mediump float;                            \n"
@@ -140,10 +137,7 @@ auto gFragmentShader =
         "{                                                   \n"
         "  gl_FragColor = vColorVarying;                            \n"
         "}                                                   \n";
-//        "precision mediump float;\n"
-//        "void main() {\n"
-//        "  gl_FragColor = vec4(0.0, 1.0, 0.0, 1.0);\n"
-//        "}\n";
+
 
 GLuint loadShader(GLenum shaderType, const char *pSource) {
     GLuint shader = glCreateShader(shaderType);
@@ -237,8 +231,7 @@ bool setupGraphics(int w, int h) {
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LEQUAL);
     glDepthMask(GL_TRUE);
-//    glCullFace ( GL_BACK );
-//    glEnable ( GL_CULL_FACE );
+
 
     return true;
 }
@@ -269,7 +262,7 @@ void Update(float deltaTime, int width, int height) {
     esTranslate(&modelview, 0.0, 0.0, -5.0);
 
     // Rotate the cube
-    esRotate(&modelview, userData->angle, 1.0, 0.0, 1.0);
+    esRotate(&modelview, userData->angle, 0.0, 1.0, 0.0);
 
     // Compute the final MVP by multiplying the
     // modevleiw and perspective matrices together
@@ -298,10 +291,7 @@ void renderFrame() {
 
     glUniformMatrix4fv(userData->mvpLoc, 1, GL_FALSE, (GLfloat *) &userData->mvpMatrix.m[0][0]);
 
-//    GLint mColorHandle =glGetUniformLocation(userData->programObject, "vColor");
-//
-//    // Set color for drawing the triangle
-//    glUniform4fv(mColorHandle, 1, color);
+
     GLint mColorHandle = glGetAttribLocation(userData->programObject, "vColor");
     glEnableVertexAttribArray(mColorHandle);
     glVertexAttribPointer(
